@@ -66,62 +66,58 @@ function listarNotas() {
  * Elimina una nota por su título.
  * @param {string} titulo - El título de la nota a eliminar.
  */
+
 function eliminarNota(titulo) {
-  if (fs.existsSync(filePath)) {
+  if (!fs.existsSync(filePath)) {
+    console.log(`No hay notas para eliminar.`)
+    return;
+}
     // PISTA: Primero lee todas las notas.
     // COMPLETAR: Usa fs.readFileSync para leer el archivo.
-    const texto = fs.readFileSync(filePath, `utf8`);
-
     // PISTA: Filtra las notas y elimina la que coincida con el título.
     // COMPLETAR: Usa Array.filter para obtener las notas restantes.
+    const texto = fs.readFileSync(filePath, `utf8`);
+    if (!texto){
+        console.log (`El archivo de notas esta vacío`);
+        return;}
 
-    if (texto){
         const notas = JSON.parse(texto);
-
         const notasRestantes = notas.filter( nota => nota.titulo !== titulo);
-
         if(notasRestantes.length < notas.length){
-            fs.writeFileSync(
-                filePath,
-                JSON.stringify(notasRestantes,null, 2),
-                `utf8`
-            );
+            fs.writeFileSync(filePath,JSON.stringify(notasRestantes,null, 2),`utf8`);
             console.log(`Nota con título "${titulo}" eliminada.`)
         } else {
             console.log(`No se encontro ninguna nota con el titulo "${titulo}"`);     
         }
-    } else {
-        console.log (`El archivo de notas esta vacío.`);
-    } 
-} else {
-    console.log('No hay notas para eliminar.');
-}
 }
 
 // Ejecución de ejemplo
 agregarNota('Compras', 'Comprar leche y pan.');
 listarNotas();
-eliminarNota('Compras');
+//eliminarNota(`Compras`);
+//listarNotas();
+agregarNota(`Encargo`, `Comprar Agua y Líquidos`);
 listarNotas();
-agregarNota(`Tareas`, `Pendientes,`);
+eliminarNota('Encargo');
+listarNotas();
+agregarNota('Compras', `Comprar leche y pan.`);
 listarNotas();
 
 // ### Pistas para Resolver el Proyecto ###
 // Formato del archivo `notas.json`:
 [
 { "titulo": "Compras", "contenido": "Comprar leche y pan." },
-{ "titulo": "Trabajo", "contenido": "Terminar reporte semanal." },
-{ "titulo": "Tareas", "contenido": "Pendientes."}
+{ "titulo": "Trabajo", "contenido": "Terminar reporte semanal." }
 ]
 
 
 // #### Operaciones clave: ###
 // 1. Para leer las notas existentes:
-const data = fs.readFileSync(filePath, 'utf8');
-const notas = JSON.parse(data);
+//const data = fs.readFileSync(filePath, 'utf8');
+//const notas = JSON.parse(data);
 
 // 2. Para guardar las notas actualizadas:
-fs.writeFileSync(filePath, JSON.stringify(notas, null, 2));
+//fs.writeFileSync(filePath, JSON.stringify(notas, null, 2));
 
 // 3. Filtrar notas para eliminar:
-const notasRestantes = notas.filter((nota) => nota.titulo !== titulo);
+//const notasRestantes = notas.filter((nota) => nota.titulo !== titulo);
